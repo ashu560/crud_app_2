@@ -140,6 +140,7 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('students')
+                    .orderBy('firstName')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
