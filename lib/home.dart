@@ -36,6 +36,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Method to delete a document from Firestore
+  Future<void> deleteDocument(String documentId) async {
+    try {
+      // Reference to the 'Students' collection in Firestore
+      CollectionReference students =
+          FirebaseFirestore.instance.collection('students');
+
+      // Delete the document with the given documentId
+      await students.doc(documentId).delete();
+
+      // Print success message if document is deleted successfully
+      print('Document deleted successfully');
+    } catch (error) {
+      // Print error message if there's an error deleting the document
+      print('Error deleting document: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -128,10 +146,20 @@ class _HomePageState extends State<HomePage> {
                             users[index].data() as Map<String, dynamic>;
                         final firstName = user['firstName'];
                         final lastName = user['lastName'];
+                        final documentId = users[index].id;
                         return ListTile(
                           leading: Icon(Icons.person),
                           title: Text('$firstName $lastName'),
-                          trailing: Icon(Icons.edit),
+                          trailing: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              // Call the method to delete the document
+                              deleteDocument(documentId);
+                            },
+                          ),
                         );
                       },
                     );
