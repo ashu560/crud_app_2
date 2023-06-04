@@ -17,22 +17,27 @@ class _HomePageState extends State<HomePage> {
 
   // Method to save data to Firestore
   Future<void> saveDataToFirestore(String firstName, String lastName) async {
-    try {
-      // Reference to the 'Students' collection in Firestore
-      CollectionReference students =
-          FirebaseFirestore.instance.collection('students');
+    // Check if the entered first name and last name are not empty
+    if (firstName.isNotEmpty && lastName.isNotEmpty) {
+      try {
+        CollectionReference students =
+            FirebaseFirestore.instance.collection('students');
 
-      // Add a new document with the entered first name and last name
-      await students.add({
-        'firstName': firstName,
-        'lastName': lastName,
-      });
+        await students.add({
+          'firstName': firstName,
+          'lastName': lastName,
+        });
 
-      // Print success message if data is saved successfully
-      print('Data saved to Firestore successfully');
-    } catch (error) {
-      // Print error message if there's an error saving data
-      print('Error saving data to Firestore: $error');
+        // Print success message if data is saved successfully
+        print('Data saved to Firestore successfully');
+
+        // Clear the text fields
+        _firstNameController.clear();
+        _lastNameController.clear();
+      } catch (error) {
+        // Print error message if there's an error saving data
+        print('Error saving data to Firestore: $error');
+      }
     }
   }
 
